@@ -1,0 +1,6 @@
+/service/venv/
+.idea
+*.pyc
+.DS_Store
+
+/frontend/node_modules/
