@@ -4,7 +4,6 @@ import {useNavigate} from 'react-router-dom';
 import DetailRow from "./detailRow";
 import DetailResources from "./detailResources";
 import LocationMap from "./locationMap";
-import '../../assets/css/leaflet.css';
 
 export function LocationDetail({data}: { data: ILocationDetailResult }) {
     const nav = useNavigate();

@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from elastic_index import Index
 from mysql_handler import Db
 import os
@@ -10,7 +11,9 @@ import os
 #     "doc_type" : "sport"
 # }
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='browser', static_url_path='')
+
+CORS(app)
 
 config = {
     "url" : os.getenv("ES_URI", "http://localhost"),
@@ -19,10 +22,10 @@ config = {
 }
 
 db_config = {
-    "host": os.environ.get("DB_HOST", "localhost"),
-    "database": os.environ.get("DB_DATABASE", "emlo"),
-    "user": os.environ.get("DB_USER", "root"),
-    "password": os.environ.get("DB_PASSWORD", "bonzo")
+    "host": os.getenv("DB_HOST", "localhost"),
+    "database": os.getenv("DB_DATABASE", "emlo"),
+    "user": os.getenv("DB_USER", "root"),
+    "password": os.getenv("DB_PASSWORD", "bonzo")
 }
 
 index = Index(config)
@@ -35,7 +38,17 @@ def after_request(response):
     response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
     return response
 
-@app.route('/detail/<id>')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/about')
+@app.route('/letters')
+@app.route('/persons')
+@app.route('/locations')
+def catch_all():
+    return app.send_static_file("index.html")
+
+@app.route('/letter_detail/<id>')
+@app.route('/location_detail/<id>')
+@app.route('/person_detail/<id>')
 def detail(id):
     return app.send_static_file("index.html")
 
@@ -75,19 +88,19 @@ def browse_letters():
     ret_struc = index.browse_letters(struc["page"], struc["page_length"], struc["searchvalues"])
     return jsonify(ret_struc)
 
-@app.route("/location_detail/<id>", methods=['GET'])
-def location_detail(id):
+@app.route("/get_location_detail/<id>", methods=['GET'])
+def get_location_detail(id):
     ret_struc = db.get_location_details(id)
     return jsonify(ret_struc)
 
-@app.route("/person_detail/<id>", methods=['GET'])
-def person_detail(id):
+@app.route("/get_person_detail/<id>", methods=['GET'])
+def get_person_detail(id):
     ret_struc = db.get_person_details(id)
     return jsonify(ret_struc)
 
 
-@app.route("/letter_detail/<id>", methods=['GET'])
-def letter_detail(id):
+@app.route("/get_letter_detail/<id>", methods=['GET'])
+def get_letter_detail(id):
     ret_struc = db.get_letter_details(id)
     return jsonify(ret_struc)
 #Start main program

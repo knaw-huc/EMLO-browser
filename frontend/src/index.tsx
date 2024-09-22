@@ -24,15 +24,16 @@ import LetterDetail from "./components/details/letterDetail";
 import {Header} from "./components/pageHeader";
 import {Home} from "./components/home";
 import About from "./components/about";
+import {BASE_URL} from "./misc/config";
 
 const header = <Header/>
-const locationSearchLoader = createSearchLoader(searchUtils.getSearchObjectFromParams, 'http://localhost:5000/browse_location', 20);
-const personSearchLoader = createSearchLoader(searchUtils.getSearchObjectFromParams, 'http://localhost:5000/browse_person', 20);
-const letterSearchLoader = createSearchLoader(searchUtils.getSearchObjectFromParams, 'http://localhost:5000/browse_letter', 20);
+const locationSearchLoader = createSearchLoader(searchUtils.getSearchObjectFromParams, BASE_URL + '/browse_location', 20);
+const personSearchLoader = createSearchLoader(searchUtils.getSearchObjectFromParams, BASE_URL + '/browse_person', 20);
+const letterSearchLoader = createSearchLoader(searchUtils.getSearchObjectFromParams, BASE_URL + '/browse_letter', 20);
 const title = 'EMLO Browser';
-const locationDetailLoader = createDetailLoader(id => `http://localhost:5000/location_detail/${id}`);
-const personDetailLoader = createDetailLoader(id => `http://localhost:5000/person_detail/${id}`);
-const letterDetailLoader = createDetailLoader(id => `http://localhost:5000/letter_detail/${id}`);
+const locationDetailLoader = createDetailLoader(id => BASE_URL + `/get_location_detail/${id}`);
+const personDetailLoader = createDetailLoader(id => BASE_URL + `/get_person_detail/${id}`);
+const letterDetailLoader = createDetailLoader(id => BASE_URL + `/get_letter_detail/${id}`);
 const routeObject: RouteObject = {
     path: '/',
     element: <App header={header}/>,

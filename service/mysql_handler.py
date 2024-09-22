@@ -4,14 +4,15 @@ from mysql.connector import pooling
 
 class Db:
     def __init__(self, config):
+        self.config = config
         try:
             self.connection_pool = pooling.MySQLConnectionPool(pool_name="pynative_pool",
                                                   pool_size=1,
                                                   pool_reset_session=True,
-                                                  host=config["host"],
-                                                  database=config["database"],
-                                                  user=config["user"],
-                                                  password=config["password"])
+                                                  host=self.config["host"],
+                                                  database=self.config["database"],
+                                                  user=self.config["user"],
+                                                  password=self.config["password"])
         except:
             print("error: No database pool created!")
 
